@@ -1,0 +1,9 @@
+# 插件测试配置（插件身份在 _manifest.json，这个文件只服务本地 pytest；进仓库无害）
+[project]
+name = "feihua-ling"
+version = "1.0.0"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

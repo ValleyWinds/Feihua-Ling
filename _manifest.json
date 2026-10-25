@@ -1,0 +1,33 @@
+{
+  "manifest_version": 2,
+  "id": "valleywinds.feihua-ling",
+  "name": "飞花令",
+  "version": "1.0.0",
+  "description": "群聊飞花令游戏：记录所有已用诗句并在 bot 生成回复前注入清单，让 bot 接令时绝不重复任何人（包括自己）说过的诗句",
+  "author": {
+    "name": "ValleyWinds",
+    "url": "https://github.com/ValleyWinds"
+  },
+  "license": "MIT",
+  "urls": {
+    "repository": "https://github.com/ValleyWinds/Feihua-Ling",
+    "homepage": "https://github.com/ValleyWinds/Feihua-Ling"
+  },
+  "host_application": {
+    "min_version": "1.3.15",
+    "max_version": "1.3.99"
+  },
+  "sdk": {
+    "min_version": "2.16.0",
+    "max_version": "2.99.99"
+  },
+  "capabilities": [
+    "send.text",
+    "llm.generate"
+  ],
+  "i18n": {
+    "default_locale": "zh-CN",
+    "supported_locales": ["zh-CN", "en-US"]
+  },
+  "changelog": "CHANGELOG.md"
+}

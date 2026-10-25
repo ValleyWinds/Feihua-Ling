@@ -1,0 +1,24 @@
+# ---- 凭据与本机配置（防泄漏，勿删）----
+# 环境变量文件：常被用来存 API key / token，绝对不要提交
+.env
+.env.*
+*.key
+# 插件配置由插件系统在首次运行时自动生成；实机上改过的配置可能含 token/密码，不要上传
+config.toml
+# 手工备份的配置（改配置前的副本）
+config_back/
+
+# ---- 运行产物 ----
+data/
+logs/
+__pycache__/
+*.pyc
+
+# ---- ZCode 本地痕迹 ----
+.zcode/
+.zcodeignore
+Temp/
+*.log
+
+# ---- 本地测试产物 ----
+uv.lock
