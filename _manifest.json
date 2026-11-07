@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "id": "valleywinds.feihua-ling",
   "name": "飞花令",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "群聊飞花令游戏：记录所有已用诗句并在 bot 生成回复前注入清单，让 bot 接令时绝不重复任何人（包括自己）说过的诗句",
   "author": {
     "name": "ValleyWinds",

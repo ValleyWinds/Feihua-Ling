@@ -25,7 +25,7 @@ MaiBot 的回复上下文只有最近几十条消息。飞花令玩上十几轮�
 | `/fhl <字>` | 开局并指定令字，如 `/fhl 花` |
 | `/fhl end` | 结束本局，发战报排行（`/fhl stop` 同义） |
 | `/fhl status` | 查看当前局进度 |
-| `/fhl history` | 查看上一局战报（`/fhl last` 同义） |
+| `/fhl history` | 查看本群上一局战报（`/fhl last` 同义） |
 | `/fhl help` | 用法说明 |
 
 ## 游戏示例

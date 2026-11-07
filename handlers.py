@@ -218,9 +218,10 @@ class HandlersMixin:
         return True, "status", 1
 
     async def _cmd_history(self, stream_id: str) -> tuple[bool, str, int]:
-        report = self._store.last_report()
+        # 按会话过滤：不展示其他群的战报与参与者昵称
+        report = self._store.last_report(stream_id)
         if report is None:
-            await self._send("还没有完成过任何一局飞花令", stream_id)
+            await self._send("本群还没有完成过飞花令，/fhl 开一局？", stream_id)
             return True, "no history", 1
         await self._send(f"📖 上一局战报：\n{report}", stream_id)
         return True, "history", 1

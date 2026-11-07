@@ -348,9 +348,15 @@ class GameStore:
         self.save()
         return game
 
-    def last_report(self) -> str | None:
-        """最近一局的历史战报文本，无历史返回 None。"""
+    def last_report(self, session_id: str | None = None) -> str | None:
+        """指定会话最近一局的历史战报文本，无历史返回 None。
+
+        按会话过滤：单实例服务多个会话时，避免把其他群的战报与参与者昵称带出
+        （收录审核建议，issue #1455）。
+        """
         for h in self.history:
+            if session_id is not None and h.get("session_id") != session_id:
+                continue
             report = h.get("report")
             if report:
                 return str(report)

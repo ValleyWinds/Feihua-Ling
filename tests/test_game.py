@@ -219,9 +219,39 @@ def test_store_finish_and_history(tmp_path, game_mod):
     store2 = game_mod.GameStore(tmp_path / "games.json")
     store2.load()
     assert not store2.active
-    report = store2.last_report()
+    report = store2.last_report("s1")
     assert report and "春眠不觉晓" not in report  # 战报是排行不含诗句原文
     assert "张三 ×1" in report
+
+
+def test_last_report_filters_by_session(tmp_path, game_mod):
+    """多群隔离：/fhl history 不得展示其他群的战报与参与者昵称。"""
+    store = game_mod.GameStore(tmp_path / "games.json")
+    store.load()
+    g1 = game_mod.Game(
+        session_id="groupA", keyword="春", start_time=1.0, last_activity=2.0
+    )
+    game_mod.record_entry(g1, "u1", "张三", "春眠不觉晓", 2.0)
+    store.start(g1)
+    store.finish("groupA", "manual", 3.0)
+    g2 = game_mod.Game(
+        session_id="groupB", keyword="月", start_time=4.0, last_activity=5.0
+    )
+    game_mod.record_entry(g2, "u2", "李四", "床前明月光", 5.0)
+    store.start(g2)
+    store.finish("groupB", "manual", 6.0)
+
+    # A 群只能看到自己的战报，不出现 B 群的人名与令字
+    report_a = store.last_report("groupA")
+    assert "张三" in report_a
+    assert "李四" not in report_a
+    assert "「月」" not in report_a
+    # 反之亦然
+    report_b = store.last_report("groupB")
+    assert "李四" in report_b
+    assert "张三" not in report_b
+    # 无历史的会话拿不到任何东西
+    assert store.last_report("groupC") is None
 
 
 def test_store_history_limit(tmp_path, game_mod):
@@ -234,3 +264,20 @@ def test_store_history_limit(tmp_path, game_mod):
         store.start(g)
         store.finish(f"s{i}", "manual", 3.0)
     assert len(store.history) == game_mod.HISTORY_LIMIT
+
+
+def test_last_report_prefers_requested_session_over_newest(tmp_path, game_mod):
+    """history[0] 是别的群的新局时，仍返回本群的那局。"""
+    store = game_mod.GameStore(tmp_path / "games.json")
+    store.load()
+    ga = game_mod.Game(session_id="A", keyword="春", start_time=1.0, last_activity=2.0)
+    game_mod.record_entry(ga, "u1", "张三", "春眠不觉晓", 2.0)
+    store.start(ga)
+    store.finish("A", "manual", 3.0)
+    gb = game_mod.Game(session_id="B", keyword="花", start_time=4.0, last_activity=5.0)
+    game_mod.record_entry(gb, "u2", "李四", "花间一壶酒", 5.0)
+    store.start(gb)
+    store.finish("B", "manual", 6.0)
+    assert store.history[0]["session_id"] == "B"  # 最新局是 B
+    report_a = store.last_report("A")
+    assert "张三" in report_a and "李四" not in report_a
